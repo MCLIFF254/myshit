@@ -1,49 +1,25 @@
-```
-# Dependencies
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-env/
-venv/
-ENV/
-.venv/
+```gitignore
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+
+# Environment
 .env
 .env.local
-.env.*
-.env~local
-.env~production
-requirements.txt.bak
+*.env.*
 
-# Build artifacts
-dist/
-build/
-*.egg-info/
-.eggs/
-.sass-cache/
-.well-known/
-*.so
+# Editors
+.vscode/
+.idea/
 
-# Logs
-*.log
-logs/
-
-# Testing
-.coverage
-htmlcov/
-.coverage.*
-.cache/
-.pytest_cache/
-.hypothesis/
-
-# OS generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
+# Windows specific
 Thumbs.db
-Icon?
+Desktop.ini
+
+# PowerShell
+*.ps1xml
+*.psc1
+*.psd1
+*.psm1
 ```
