@@ -1,0 +1,92 @@
+{
+  "caption_styles": {
+    "bebas_neue_pro": {
+      "font": "BebasNeue-Regular.ttf",
+      "fontsize": 70,
+      "color": "white",
+      "stroke_color": "black",
+      "stroke_width": 2,
+      "shadow": true,
+      "shadow_color": "rgba(0,0,0,0.7)",
+      "shadow_offset": "2x2",
+      "glow": true,
+      "glow_color": "yellow",
+      "glow_radius": 3,
+      "position": "bottom_hcenter",
+      "margin_y": 150,
+      "box": false,
+      "description": "Tall bold font with glow effects for high impact hooks"
+    },
+    "montserrat_bold_cinematic": {
+      "font": "Montserrat-Bold.ttf",
+      "fontsize": 60,
+      "color": "#ffffff",
+      "gradient": {
+        "start": "#FFD700",
+        "end": "#ffffff"
+      },
+      "stroke_color": "black",
+      "stroke_width": 1.5,
+      "shadow": true,
+      "shadow_color": "rgba(0,0,0,0.8)",
+      "shadow_offset": "3x3",
+      "position": "bottom_hcenter",
+      "margin_y": 140,
+      "box": false,
+      "description": "Modern gradient text for cinematic feel"
+    },
+    "poppins_animated": {
+      "font": "Poppins-Bold.ttf",
+      "fontsize": 65,
+      "color": "white",
+      "stroke_color": "black",
+      "stroke_width": 2,
+      "shadow": true,
+      "shadow_color": "rgba(0,0,0,0.6)",
+      "shadow_offset": "2x2",
+      "position": "bottom_hcenter",
+      "margin_y": 145,
+      "box": false,
+      "animate": "pop_in",
+      "description": "Ready for pop-in animations and dynamic text"
+    },
+    "oswald_kinetic": {
+      "font": "Oswald-Bold.ttf",
+      "fontsize": 68,
+      "color": "white",
+      "stroke_color": "black",
+      "stroke_width": 1,
+      "shadow": false,
+      "position": "bottom_hcenter",
+      "margin_y": 150,
+      "box": true,
+      "box_color": "rgba(0,0,0,0.7)",
+      "box_padding": 15,
+      "box_radius": 8,
+      "description": "Background box for maximum readability on any content"
+    },
+    "roboto_professional": {
+      "font": "Roboto-Bold.ttf",
+      "fontsize": 62,
+      "color": "#f0f0f0",
+      "stroke_color": "#1a1a1a",
+      "stroke_width": 1.5,
+      "shadow": true,
+      "shadow_color": "rgba(0,0,0,0.5)",
+      "shadow_offset": "1x1",
+      "position": "bottom_hcenter",
+      "margin_y": 145,
+      "box": false,
+      "description": "Clean corporate style for professional content"
+    }
+  },
+  "default_style": "bebas_neue_pro",
+  "video_settings": {
+    "resolution": "1080x1920",
+    "fps": 30,
+    "crf": 18,
+    "preset": "slow",
+    "audio_sample_rate": 44100,
+    "audio_bitrate": "192k"
+  }
+}
