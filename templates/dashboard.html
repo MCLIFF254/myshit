@@ -129,6 +129,7 @@
         }
 
         .form-group input,
+        .form-group select,
         .form-group textarea {
             width: 100%;
             padding: 12px 16px;
@@ -141,6 +142,7 @@
         }
 
         .form-group input:focus,
+        .form-group select:focus,
         .form-group textarea:focus {
             outline: none;
             border-color: var(--primary);
@@ -335,6 +337,54 @@
                         <input type="text" id="title" placeholder="Catchy YouTube title" required>
                     </div>
 
+                    <div class="form-group">
+                        <label for="videoMode">Video Mode</label>
+                        <select id="videoMode">
+                            <option value="slideshow">Static Slideshow</option>
+                            <option value="cinematic" selected>Cinematic AI Video</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="videoProvider">Video Provider (Cinematic Mode)</label>
+                        <select id="videoProvider">
+                            <option value="kling_turbo">Kling 1.6 Turbo (Fast) — ~$0.15/video</option>
+                            <option value="kling">Kling 1.6 Standard (High Quality) — ~$0.18/video</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="captionStyle">Caption Style</label>
+                        <select id="captionStyle">
+                            <option value="modern_bold_yellow">Modern Bold Yellow</option>
+                            <option value="minimal_white">Minimal White</option>
+                            <option value="zack_films_style">Cinematic Drop Shadow</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="musicGenre">Background Music Genre</label>
+                        <input type="text" id="musicGenre" placeholder="e.g., cinematic, lofi, ambient (optional)">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="style">Visual Style</label>
+                        <select id="style">
+                            <option value="default">Cinematic (Default)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="imageModel">AI Image Model</label>
+                        <select id="imageModel">
+                            <option value="flux">FLUX (Black Forest Labs) — Tier S</option>
+                        </select>
+                    </div>
+                    
+                    <div id="costEstimate" style="padding: 10px; background: rgba(255,255,255,0.05); border-radius: 6px; margin-bottom: 15px; font-size: 14px; text-align: center;">
+                        Estimated Cost: <strong style="color: #4CAF50;">$0.15</strong>
+                    </div>
+
                     <button type="submit" class="btn btn-primary" id="createBtn">
                         🚀 Generate Video
                     </button>
@@ -384,9 +434,9 @@
 
     <script>
         // Configuration
-        const API_BASE_URL = window.location.hostname === 'localhost' 
-            ? 'http://localhost:5001' 
-            : '/api';
+        const API_BASE_URL = (window.location.port === '5001' || window.location.pathname.includes('dashboard') || window.location.pathname === '/')
+            ? window.location.origin
+            : 'http://localhost:5001';
 
         // State
         let videos = JSON.parse(localStorage.getItem('autotube_videos') || '[]');
@@ -405,9 +455,43 @@
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             checkAPIHealth();
+            loadStyles();
+            loadModels();
             updateStats();
             renderVideoList();
         });
+
+        // Load Styles from API
+        async function loadStyles() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/styles`);
+                const data = await response.json();
+                if (data.success && data.styles && data.styles.length > 0) {
+                    const styleSelect = document.getElementById('style');
+                    styleSelect.innerHTML = data.styles.map(s => 
+                        `<option value="${escapeHtml(s.id)}">${escapeHtml(s.label)} [${escapeHtml(s.category || 'general')}]</option>`
+                    ).join('');
+                }
+            } catch (e) {
+                console.warn('Could not load styles dynamically:', e);
+            }
+        }
+
+        // Load Models from API
+        async function loadModels() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/models`);
+                const data = await response.json();
+                if (data.success && data.models && data.models.length > 0) {
+                    const modelSelect = document.getElementById('imageModel');
+                    modelSelect.innerHTML = data.models.map(m => 
+                        `<option value="${escapeHtml(m.id)}">${escapeHtml(m.label)} — Tier ${escapeHtml(m.tier || '?')}</option>`
+                    ).join('');
+                }
+            } catch (e) {
+                console.warn('Could not load models dynamically:', e);
+            }
+        }
 
         // Check API Health
         async function checkAPIHealth() {
@@ -502,6 +586,12 @@
                 content: document.getElementById('content').value,
                 cta: document.getElementById('cta').value,
                 title: document.getElementById('title').value,
+                style: document.getElementById('style') ? document.getElementById('style').value : 'default',
+                imageModel: document.getElementById('imageModel') ? document.getElementById('imageModel').value : 'flux',
+                videoMode: document.getElementById('videoMode') ? document.getElementById('videoMode').value : 'slideshow',
+                videoProvider: document.getElementById('videoProvider') ? document.getElementById('videoProvider').value : 'kling',
+                captionStyle: document.getElementById('captionStyle') ? document.getElementById('captionStyle').value : 'modern_bold_yellow',
+                musicGenre: document.getElementById('musicGenre') ? document.getElementById('musicGenre').value : '',
                 useAiImages: true
             };
 

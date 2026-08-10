@@ -7,6 +7,8 @@ RUN apt-get update && apt-get install -y \
     ffmpeg \
     imagemagick \
     fonts-liberation \
+    fonts-dejavu \
+    libass-dev \
     curl \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
@@ -16,6 +18,7 @@ RUN pip install --no-cache-dir \
     flask==3.0.0 \
     moviepy==2.0.0 \
     requests==2.31.0 \
+    httpx==0.25.0 \
     pillow==10.2.0 \
     gunicorn==21.2.0
 
@@ -23,9 +26,13 @@ RUN pip install --no-cache-dir \
 COPY video_api.py /scripts/
 COPY create_video.py /scripts/
 COPY ai_generator.py /scripts/
+COPY cinematic_generator.py /scripts/
+COPY storyboard_generator.py /scripts/
+COPY *.json /scripts/
+COPY templates/ /scripts/templates/
 
 # Create necessary directories
-RUN mkdir -p /videos /scripts /templates /assets
+RUN mkdir -p /videos /scripts/templates /assets
 
 # Set environment variables
 ENV FLASK_ENV=production

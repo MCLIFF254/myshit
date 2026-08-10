@@ -19,6 +19,32 @@
                         {
                             "name": "topic",
                             "value": "5 AI tools that will change your life in 2025"
+                        },
+                        {
+                            "name": "style",
+                            "value": "default",
+                            "_comment": "Style key from style_prompts.json. Options: anime, cyberpunk, manga, noir, retro_80s, vaporwave, photorealistic, cinematic_blockbuster, dark_fantasy, pop_art, watercolor, pixel_art, studio_ghibli, comic_book, oil_painting, minimalist_3d, neon_glow, steampunk, horror, ukiyo_e, graffiti_street, low_poly, surrealism, isometric, glitch_art, flat_design, afrofuturism, solarpunk, default"
+                        },
+                        {
+                            "name": "imageModel",
+                            "value": "flux",
+                            "_comment": "Image model id from models_config.json. Options (ranked best→worst): flux, nanobanana-2, seedream5-pro, ideogram-v4, gptimage, seedream5, nanobanana-2-lite, kontext, wan-image, klein"
+                        },
+                        {
+                            "name": "videoMode",
+                            "value": "cinematic"
+                        },
+                        {
+                            "name": "videoProvider",
+                            "value": "kling"
+                        },
+                        {
+                            "name": "captionStyle",
+                            "value": "modern_bold_yellow"
+                        },
+                        {
+                            "name": "musicGenre",
+                            "value": ""
                         }
                     ]
                 },
@@ -100,7 +126,7 @@
                 },
                 "sendBody": true,
                 "specifyBody": "json",
-                "jsonBody": "={\n  \"model\": \"playai-tts\",\n  \"input\": {{ JSON.stringify($json.fullScript) }},\n  \"voice\": \"Fritz-PlayAI\",\n  \"response_format\": \"wav\"\n}",
+                "jsonBody": "={\n  \"model\": \"canopylabs/orpheus-v1-english\",\n  \"input\": {{ JSON.stringify($json.fullScript) }},\n  \"voice\": \"daniel\",\n  \"response_format\": \"wav\"\n}",
                 "options": {
                     "response": {
                         "response": {
@@ -143,7 +169,7 @@
         {
             "parameters": {
                 "method": "POST",
-                "url": "http://python:5001/generate",
+                "url": "=\"http://python:5001/{{ $('Set Topic').first().json.videoMode === 'cinematic' ? 'generate-cinematic' : 'generate' }}\"",
                 "sendHeaders": true,
                 "headerParameters": {
                     "parameters": [
@@ -155,9 +181,9 @@
                 },
                 "sendBody": true,
                 "specifyBody": "json",
-                "jsonBody": "={\n  \"hook\": {{ JSON.stringify($('Parse Script').first().json.hook) }},\n  \"content\": {{ JSON.stringify($('Parse Script').first().json.content) }},\n  \"cta\": {{ JSON.stringify($('Parse Script').first().json.cta) }},\n  \"title\": {{ JSON.stringify($('Parse Script').first().json.title) }},\n  \"audioPath\": {{ JSON.stringify($('Save Audio File').first().json.fileName) }},\n  \"outputPath\": \"/videos/short_{{ $now.format('yyyyMMdd_HHmmss') }}.mp4\",\n  \"useAiImages\": true\n}",
+                "jsonBody": "={\n  \"hook\": {{ JSON.stringify($('Parse Script').first().json.hook) }},\n  \"content\": {{ JSON.stringify($('Parse Script').first().json.content) }},\n  \"cta\": {{ JSON.stringify($('Parse Script').first().json.cta) }},\n  \"title\": {{ JSON.stringify($('Parse Script').first().json.title) }},\n  \"audioPath\": {{ JSON.stringify($('Save Audio File').first().json.fileName) }},\n  \"outputPath\": \"/videos/short_{{ $now.format('yyyyMMdd_HHmmss') }}.mp4\",\n  \"useAiImages\": true,\n  \"style\": {{ JSON.stringify($('Set Topic').first().json.style) }},\n  \"imageModel\": {{ JSON.stringify($('Set Topic').first().json.imageModel) }},\n  \"videoMode\": {{ JSON.stringify($('Set Topic').first().json.videoMode) }},\n  \"videoProvider\": {{ JSON.stringify($('Set Topic').first().json.videoProvider) }},\n  \"captionStyle\": {{ JSON.stringify($('Set Topic').first().json.captionStyle) }},\n  \"musicGenre\": {{ JSON.stringify($('Set Topic').first().json.musicGenre) }}\n}",
                 "options": {
-                    "timeout": 300000
+                    "timeout": 600000
                 }
             },
             "id": "generate-video",

@@ -69,6 +69,9 @@ GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
 FILEBROWSER_USER=admin
 FILEBROWSER_PASS=ChangeMeInEnvFile!
 
+# Timezone
+TIMEZONE=Europe/London
+
 # Docker Networks
 INTERNAL_NETWORK=internal-net
 PUBLIC_NETWORK=public-net

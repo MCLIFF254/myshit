@@ -10,6 +10,11 @@ import json
 from pathlib import Path
 from datetime import datetime
 
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8')
+if hasattr(sys.stderr, 'reconfigure'):
+    sys.stderr.reconfigure(encoding='utf-8')
+
 # MoviePy 2.x imports
 from moviepy import (
     TextClip, ColorClip, ImageClip, CompositeVideoClip, 
@@ -17,7 +22,11 @@ from moviepy import (
 )
 
 # Import AI generator
-from ai_generator import generate_slideshow_images, create_image_prompts_from_script
+from ai_generator import (
+    generate_slideshow_images,
+    create_image_prompts_from_script,
+    load_style_config,
+)
 
 # Video specifications for YouTube Shorts
 WIDTH = 1080
@@ -27,42 +36,46 @@ DURATION = 30  # seconds
 BG_COLOR = (15, 15, 25)  # Fallback background
 
 
-def create_text_clip(text, fontsize=60, color='white', duration=5, position='center'):
-    """Create a styled text clip with shadow"""
-    # Wrap text
-    max_chars = 25
-    lines = []
+def create_text_clip(text, fontsize=75, color='yellow', duration=5, position='center'):
+    """Create a styled text clip with shadow, popping up 2-3 words at a time."""
     words = text.split()
-    current_line = ""
+    chunk_size = 3
+    chunks = []
+    for i in range(0, len(words), chunk_size):
+        chunks.append(" ".join(words[i:i+chunk_size]))
     
-    for word in words:
-        if len(current_line + " " + word) <= max_chars:
-            current_line = (current_line + " " + word).strip()
-        else:
-            if current_line:
-                lines.append(current_line)
-            current_line = word
-    if current_line:
-        lines.append(current_line)
+    if not chunks:
+        return ColorClip(size=(WIDTH, HEIGHT), color=(0,0,0)).with_opacity(0).with_duration(duration)
+
+    chunk_duration = duration / len(chunks)
     
-    wrapped_text = '\n'.join(lines)
-    
-    try:
-        txt_clip = TextClip(
-            text=wrapped_text,
-            font_size=fontsize,
-            color=color,
-            font='Arial-Bold',
-            stroke_color='black',
-            stroke_width=4,
-            text_align='center',
-            size=(WIDTH - 100, None)
-        )
-        return txt_clip.with_position(position).with_duration(duration)
-    except Exception as e:
-        print(f"⚠️ Text clip error: {e}")
-        txt_clip = TextClip(text=wrapped_text, font_size=fontsize, color=color)
-        return txt_clip.with_position(position).with_duration(duration)
+    clips = []
+    font_path = 'Arial' if sys.platform == 'win32' else '/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf'
+    font_fallback = 'Arial' if sys.platform == 'win32' else '/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf'
+    for i, chunk in enumerate(chunks):
+        try:
+            txt_clip = TextClip(
+                text=chunk,
+                font_size=fontsize,
+                color=color,
+                font=font_path,
+                stroke_color='black',
+                stroke_width=6,
+                text_align='center',
+                size=(WIDTH - 100, None)
+            )
+        except Exception as e:
+            print(f"⚠️ Text clip error: {e}")
+            try:
+                txt_clip = TextClip(text=chunk, font_size=fontsize, color=color, font=font_fallback)
+            except Exception as e2:
+                txt_clip = TextClip(text=chunk, font_size=fontsize, color=color)
+            
+        txt_clip = txt_clip.with_position(position)
+        txt_clip = txt_clip.with_start(i * chunk_duration).with_duration(chunk_duration)
+        clips.append(txt_clip)
+        
+    return CompositeVideoClip(clips, size=(WIDTH, HEIGHT)).with_duration(duration)
 
 
 def create_image_scene(image_path, text, duration=6, zoom=True):
@@ -102,7 +115,7 @@ def create_image_scene(image_path, text, duration=6, zoom=True):
         
         # Dark overlay for text readability
         overlay = ColorClip(size=(WIDTH, HEIGHT), color=(0, 0, 0))
-        overlay = overlay.with_opacity(0.3).with_duration(duration)
+        overlay = overlay.with_opacity(0.15).with_duration(duration)
         clips.append(overlay)
         
     except Exception as e:
@@ -114,8 +127,8 @@ def create_image_scene(image_path, text, duration=6, zoom=True):
     if text:
         text_clip = create_text_clip(
             text,
-            fontsize=55,
-            color='white',
+            fontsize=75,
+            color='yellow',
             duration=duration,
             position='center'
         )
@@ -149,6 +162,16 @@ def create_slideshow_video(
     # Calculate duration per scene
     num_scenes = len(images)
     total_duration = 30  # Target 30 seconds
+    
+    # Check audio duration to sync
+    if audio_path and os.path.exists(audio_path):
+        try:
+            temp_audio = AudioFileClip(audio_path)
+            total_duration = temp_audio.duration
+            temp_audio.close()
+        except Exception as e:
+            print(f"   Audio duration error: {e}")
+            
     scene_duration = (total_duration + (num_scenes - 1) * crossfade_duration) / num_scenes
     
     # Create scenes
@@ -220,20 +243,24 @@ def create_youtube_short(
     title: str,
     audio_path: str = None,
     output_path: str = "output.mp4",
-    use_ai_images: bool = True
+    use_ai_images: bool = True,
+    style_id: str = "default",
+    image_model: str = "flux",
 ):
     """
-    Create YouTube Short with AI image slideshow
-    
+    Create YouTube Short with AI image slideshow.
+
     Args:
-        hook: Hook text (0-6s)
-        content: Content text, newline-separated points (6-24s)
-        cta: Call to action text (24-30s)
-        title: Video title
-        audio_path: Optional audio file
+        hook:        Hook text (0-6s)
+        content:     Content text, newline-separated points (6-24s)
+        cta:         Call to action text (24-30s)
+        title:       Video title
+        audio_path:  Optional audio file
         output_path: Output video path
         use_ai_images: Generate AI images (vs solid backgrounds)
-        
+        style_id:    Style key from style_prompts.json (e.g. 'anime', 'cyberpunk')
+        image_model: Image model id from models_config.json (e.g. 'flux', 'seedream5-pro')
+
     Returns:
         Path to created video
     """
@@ -250,10 +277,18 @@ def create_youtube_short(
     
     # Generate or use placeholder images
     if use_ai_images:
-        print("🎨 Generating AI images...")
+        # Load style so we can log what's being used
+        style = load_style_config(style_id)
+        print(f"🎨 Generating AI images | style='{style_id}' ({style.get('label','')}) | model='{image_model}'")
         prompts = create_image_prompts_from_script(hook, content, cta, title)
-        images = generate_slideshow_images(prompts, title, use_zimage=False)
-        
+        images = generate_slideshow_images(
+            prompts,
+            title,
+            use_zimage=False,
+            style_id=style_id,
+            image_model=image_model,
+        )
+
         if not images or len(images) < len(texts):
             print("⚠️ Not enough images generated, using placeholders")
             use_ai_images = False
@@ -267,7 +302,9 @@ def create_youtube_short(
             # Create temp colored image
             from PIL import Image
             img = Image.new('RGB', (WIDTH, HEIGHT), colors[i % len(colors)])
-            img_path = f"/videos/temp_bg_{i}.jpg"
+            videos_dir = Path(__file__).parent / "videos" if not (sys.platform != 'win32' and Path("/videos").exists()) else Path("/videos")
+            videos_dir.mkdir(parents=True, exist_ok=True)
+            img_path = str(videos_dir / f"temp_bg_{i}.jpg")
             img.save(img_path)
             images.append(img_path)
     
@@ -294,7 +331,7 @@ def main():
             test_data["hook"] = sys.argv[1]
     
     # Paths
-    output_dir = Path("/videos")
+    output_dir = Path(__file__).parent / "videos" if not (sys.platform != 'win32' and Path("/videos").exists()) else Path("/videos")
     output_dir.mkdir(exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     output_path = str(output_dir / f"short_{timestamp}.mp4")
@@ -308,7 +345,9 @@ def main():
         title=test_data.get("title", "Awesome Video"),
         audio_path=audio_path,
         output_path=output_path,
-        use_ai_images=True
+        use_ai_images=True,
+        style_id=test_data.get("style", "default"),
+        image_model=test_data.get("imageModel", "flux"),
     )
     
     print(f"\n📁 Output: {result}")

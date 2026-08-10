@@ -1,6 +1,6 @@
 @echo off
 echo 🚀 Starting YouTube Automation Factory...
-cd /d "C:\Users\hriti\project\n8n\short_automation"
+cd /d "%~dp0"
 docker-compose up -d
 timeout 20
 echo.

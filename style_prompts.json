@@ -1,0 +1,269 @@
+{
+  "_meta": {
+    "description": "AutoTube Style Prompts Library — plug any style_id into the pipeline",
+    "version": "1.0.0",
+    "usage": "Select a style by its key. Append 'image_suffix' to every AI image prompt. Use 'script_system_prompt' in the Groq AI Script Writer node. 'negative' lists things to avoid.",
+    "how_to_add": "Copy any block, change the key, and tweak the fields. The system reads this file at runtime."
+  },
+
+  "default": {
+    "label": "Cinematic (Default)",
+    "category": "general",
+    "description": "The current default style — dramatic lighting, hyper-detailed, storybook feel.",
+    "image_suffix": "cinematic, hyper-detailed, 8k, dramatic lighting, no text, storybook style, high quality, vertical 9:16 format",
+    "script_system_prompt": "You are a viral YouTube Shorts script writer. You create engaging, punchy 30-second scripts that hook viewers instantly.",
+    "negative": "blurry, low quality, distorted, watermark, text overlay, deformed"
+  },
+
+  "anime": {
+    "label": "Anime",
+    "category": "illustration",
+    "description": "Clean modern anime aesthetic with vibrant colors and expressive characters.",
+    "image_suffix": "anime style, cel-shaded, vibrant colors, clean linework, emotive expressive eyes, anime key visual, Studio Bones quality, dynamic pose, vertical 9:16 format, no text, high detail",
+    "script_system_prompt": "You are an energetic anime narrator writing a YouTube Shorts script. Use dramatic pauses, hype language, and the excitement of a shonen anime recap. Keep it punchy and thrilling.",
+    "negative": "blurry, realistic photo, western cartoon, deformed, low quality, watermark"
+  },
+
+  "manga": {
+    "label": "Manga",
+    "category": "illustration",
+    "description": "Black-and-white manga panel art with screentone shading and bold ink lines.",
+    "image_suffix": "manga art style, black and white, bold ink linework, screentone shading, dramatic composition, manga panel layout, high contrast, vertical 9:16 format, no text, detailed crosshatching",
+    "script_system_prompt": "You are a dramatic manga narrator. Write the script like inner monologue from a manga protagonist — intense, reflective, with sudden reveals. Short punchy sentences.",
+    "negative": "color, blurry, photorealistic, watermark, low detail"
+  },
+
+  "cyberpunk": {
+    "label": "Cyberpunk",
+    "category": "sci-fi",
+    "description": "Neon-soaked dystopian cityscapes with holographic UI and rain-slicked streets.",
+    "image_suffix": "cyberpunk aesthetic, neon rim lighting, cyan and magenta palette, wet asphalt reflections, holographic advertisements, futuristic urban decay, volumetric fog, high contrast, vertical 9:16 format, no text, 8k",
+    "script_system_prompt": "You are a cyberpunk street hacker narrating a YouTube Short. Tone: gritty, fast-paced, dystopian cool. Use tech jargon sparingly. Make the viewer feel like they just jacked into the net.",
+    "negative": "bright daylight, pastoral, blurry, deformed, low quality, watermark"
+  },
+
+  "noir": {
+    "label": "Film Noir",
+    "category": "cinematic",
+    "description": "1940s detective film aesthetic — deep shadows, rain, smoke, monochrome drama.",
+    "image_suffix": "film noir style, chiaroscuro lighting, deep dramatic shadows, rain-slicked streets, smoke atmosphere, high contrast, monochrome desaturated palette, moody mysterious, 1940s detective aesthetic, vertical 9:16 format, no text",
+    "script_system_prompt": "You are a hard-boiled noir detective narrating a YouTube Short. Speak in first person, cynical tone, poetic observations. Short sentences. Metaphors about shadows and rain.",
+    "negative": "bright colors, cheerful, cartoon, blurry, deformed, watermark"
+  },
+
+  "retro_80s": {
+    "label": "Retro 80s",
+    "category": "retro",
+    "description": "Synthwave / outrun aesthetic with neon grids, sunset gradients, and VHS grain.",
+    "image_suffix": "1980s retro aesthetic, synthwave outrun style, neon grid horizon, sunset gradient sky, VHS color palette, light film grain, scan lines, nostalgic warm tones, retro-futuristic, vertical 9:16 format, no text",
+    "script_system_prompt": "You are an 80s TV show host narrating a YouTube Short. Tone: enthusiastic, slightly cheesy, nostalgic. Use phrases like 'radical', 'totally awesome'. Make it feel like a VHS tape discovery.",
+    "negative": "modern, minimalist, blurry, deformed, watermark, clean digital"
+  },
+
+  "vaporwave": {
+    "label": "Vaporwave",
+    "category": "retro",
+    "description": "Pastel pink-purple dreamscape with marble statues, glitch art, and surreal grids.",
+    "image_suffix": "vaporwave aesthetic, pastel pink and cyan gradients, marble bust statues, glitch art effects, retro grid patterns, palm trees, surreal dreamlike atmosphere, synthwave colors, vertical 9:16 format, no text",
+    "script_system_prompt": "You are a dreamy, philosophical narrator for a YouTube Short. Tone: surreal, slightly ironic, contemplative. Mix consumer culture references with zen observations. Slow build to a punchline.",
+    "negative": "realistic, dark, gritty, blurry, deformed, watermark"
+  },
+
+  "photorealistic": {
+    "label": "Photorealistic",
+    "category": "photography",
+    "description": "Hyper-realistic DSLR-quality photography with shallow depth of field.",
+    "image_suffix": "photorealistic, RAW photo quality, 85mm lens, f/1.4 shallow depth of field, hyper-detailed skin texture, DSLR quality, natural lighting, 8k resolution, professional photography, vertical 9:16 format, no text",
+    "script_system_prompt": "You are a professional documentary narrator writing a YouTube Short. Tone: authoritative, clear, insightful. State facts confidently, build curiosity, deliver a satisfying conclusion.",
+    "negative": "cartoon, anime, illustration, blurry, deformed, watermark, painting"
+  },
+
+  "cinematic_blockbuster": {
+    "label": "Cinematic Blockbuster",
+    "category": "cinematic",
+    "description": "Hollywood movie still aesthetic with anamorphic lens flare and color grading.",
+    "image_suffix": "cinematic movie still, anamorphic lens, film grain, dramatic volumetric lighting, wide angle composition, Hollywood color grading, teal and orange palette, epic scale, vertical 9:16 format, no text, 8k",
+    "script_system_prompt": "You are a blockbuster movie trailer narrator. Write a YouTube Short script with escalating intensity, dramatic pauses, and a jaw-dropping reveal. Think Christopher Nolan meets Marvel.",
+    "negative": "flat lighting, amateur, blurry, deformed, watermark, cartoon"
+  },
+
+  "dark_fantasy": {
+    "label": "Dark Fantasy",
+    "category": "fantasy",
+    "description": "Gothic medieval atmosphere with ominous lighting and intricate dark details.",
+    "image_suffix": "dark fantasy art, gothic medieval atmosphere, ominous moody palette, sharp dramatic shadows, intricate armor and textures, eerie mystical lighting, oil painting style, expressive brushstrokes, vertical 9:16 format, no text, 8k",
+    "script_system_prompt": "You are an ancient storyteller narrating a dark legend for a YouTube Short. Tone: ominous, poetic, mythical. Use rich imagery — fire, iron, shadow, blood. Build dread, end with a twist.",
+    "negative": "bright, cheerful, cartoon, modern, blurry, deformed, watermark"
+  },
+
+  "pop_art": {
+    "label": "Pop Art",
+    "category": "illustration",
+    "description": "Bold Roy Lichtenstein / Andy Warhol inspired — vivid colors, Ben-Day dots, thick outlines.",
+    "image_suffix": "pop art style, bold black outlines, vibrant saturated flat colors, Ben-Day dots halftone pattern, high contrast graphic design, Andy Warhol Roy Lichtenstein inspired, comic book aesthetic, vertical 9:16 format, no text",
+    "script_system_prompt": "You are a hyper-energetic pop culture commentator narrating a YouTube Short. Tone: bold, punchy, exclamatory. Use short explosive sentences. Every line should hit like a headline.",
+    "negative": "realistic, muted colors, dark, blurry, deformed, watermark, photographic"
+  },
+
+  "watercolor": {
+    "label": "Watercolor",
+    "category": "art",
+    "description": "Soft watercolor painting with gentle color bleeds and textured paper feel.",
+    "image_suffix": "watercolor painting style, soft color bleeds, wet-on-wet technique, textured watercolor paper, gentle pastel palette, artistic brush strokes, delicate washes, dreamy soft edges, vertical 9:16 format, no text, high detail",
+    "script_system_prompt": "You are a gentle, warm storyteller narrating a YouTube Short. Tone: poetic, calming, whimsical. Use sensory language — colors, textures, light. Let the words flow like paint on paper.",
+    "negative": "sharp lines, digital, harsh colors, blurry, deformed, watermark, photorealistic"
+  },
+
+  "pixel_art": {
+    "label": "Pixel Art",
+    "category": "retro",
+    "description": "Retro 16-bit / 32-bit pixel art with limited palette and crisp pixels.",
+    "image_suffix": "pixel art style, 16-bit retro game aesthetic, limited color palette, crisp sharp pixels, dithering shading, side-scrolling game scene, nostalgic Nintendo SNES quality, vertical 9:16 format, no text",
+    "script_system_prompt": "You are a retro gaming YouTuber narrating a Short. Tone: nostalgic, fun, gamer speak. Reference 'power-ups', 'boss fights', 'levels'. Make knowledge feel like a game walkthrough.",
+    "negative": "realistic, 3D render, blurry, smooth gradients, watermark, deformed"
+  },
+
+  "studio_ghibli": {
+    "label": "Studio Ghibli",
+    "category": "illustration",
+    "description": "Hayao Miyazaki / Studio Ghibli — lush hand-painted backgrounds, warm nostalgic light.",
+    "image_suffix": "Studio Ghibli inspired, Hayao Miyazaki style, lush hand-painted backgrounds, warm golden light, whimsical atmosphere, detailed natural landscapes, soft cel-shaded characters, nostalgic dreamy tone, vertical 9:16 format, no text, high quality",
+    "script_system_prompt": "You are a whimsical Ghibli-style narrator for a YouTube Short. Tone: gentle, wonder-filled, wise. Speak as if telling a fairy tale to a curious child. Find magic in the ordinary.",
+    "negative": "dark, gritty, horror, photorealistic, blurry, deformed, watermark"
+  },
+
+  "comic_book": {
+    "label": "Comic Book (Marvel/DC)",
+    "category": "illustration",
+    "description": "Bold superhero comic book art with dynamic action lines and vivid coloring.",
+    "image_suffix": "comic book art style, bold dynamic action lines, vivid superhero coloring, dramatic foreshortening, thick ink outlines, halftone shading, Marvel DC inspired, dynamic composition, vertical 9:16 format, no text, high detail",
+    "script_system_prompt": "You are a comic book narrator writing a YouTube Short. Tone: heroic, dramatic, punchy. Use action words — BOOM, CRASH, UNLEASH. Build tension like a cliffhanger panel.",
+    "negative": "realistic photo, soft, blurry, deformed, watermark, muted colors"
+  },
+
+  "oil_painting": {
+    "label": "Oil Painting (Classical)",
+    "category": "art",
+    "description": "Renaissance / Baroque classical oil painting with rich textures and dramatic light.",
+    "image_suffix": "classical oil painting, Renaissance Baroque style, rich impasto texture, dramatic Rembrandt lighting, warm golden tones, detailed chiaroscuro, museum-quality fine art, canvas texture visible, vertical 9:16 format, no text",
+    "script_system_prompt": "You are a Renaissance scholar narrating a YouTube Short. Tone: eloquent, dramatic, intellectual. Use grand language and historical gravitas. Make the viewer feel the weight of knowledge.",
+    "negative": "modern, digital, cartoon, blurry, deformed, watermark, flat colors"
+  },
+
+  "minimalist_3d": {
+    "label": "Minimalist 3D",
+    "category": "3d",
+    "description": "Clean 3D render with soft clay/plastic textures and pastel studio lighting.",
+    "image_suffix": "minimalist 3D render, soft clay matte texture, pastel color palette, clean studio lighting, isometric composition, Blender Cinema4D quality, rounded smooth shapes, professional product visualization, vertical 9:16 format, no text",
+    "script_system_prompt": "You are a modern tech reviewer narrating a YouTube Short. Tone: clean, minimal, confident. Use precise language. No fluff — every word earns its place. Think Apple keynote energy.",
+    "negative": "busy, cluttered, dark, gritty, blurry, deformed, watermark, realistic photo"
+  },
+
+  "neon_glow": {
+    "label": "Neon Glow",
+    "category": "sci-fi",
+    "description": "Pure neon light art on dark backgrounds — electric blues, pinks, and purples.",
+    "image_suffix": "neon glow art, glowing neon outlines on dark background, electric blue magenta purple, light painting effect, luminous ethereal atmosphere, LED light trails, blacklight aesthetic, vertical 9:16 format, no text, 8k",
+    "script_system_prompt": "You are an EDM festival MC narrating a YouTube Short. Tone: electric, high-energy, breathless. Short bursts of hype. Make every sentence feel like a bass drop.",
+    "negative": "daylight, muted, pastel, blurry, deformed, watermark, realistic"
+  },
+
+  "steampunk": {
+    "label": "Steampunk",
+    "category": "fantasy",
+    "description": "Victorian-era mechanical aesthetic with brass gears, steam, and clockwork detail.",
+    "image_suffix": "steampunk aesthetic, Victorian era mechanical design, brass copper gears and clockwork, steam-powered machinery, ornate filigree details, sepia and amber warm tones, industrial revolution atmosphere, vertical 9:16 format, no text, 8k",
+    "script_system_prompt": "You are a Victorian inventor narrating a YouTube Short. Tone: curious, theatrical, slightly eccentric. Use mechanical metaphors — gears, pistons, engines. Mix old-world charm with futurism.",
+    "negative": "modern, digital, neon, blurry, deformed, watermark, minimalist"
+  },
+
+  "horror": {
+    "label": "Horror / Creepy",
+    "category": "dark",
+    "description": "Unsettling horror atmosphere — desaturated, foggy, uncanny valley, dread.",
+    "image_suffix": "horror atmosphere, unsettling creepy aesthetic, desaturated cold palette, dense fog, harsh shadows, uncanny valley feel, abandoned decrepit environments, eerie stillness, psychological dread, vertical 9:16 format, no text",
+    "script_system_prompt": "You are a creepypasta narrator writing a YouTube Short. Tone: slow-building dread, whispered intensity, unsettling reveals. Use second person ('you') to pull the viewer in. End on a chilling note.",
+    "negative": "bright, cheerful, colorful, cartoon, blurry, deformed, watermark"
+  },
+
+  "ukiyo_e": {
+    "label": "Ukiyo-e (Japanese Woodblock)",
+    "category": "art",
+    "description": "Traditional Japanese woodblock print art with flat perspective and flowing lines.",
+    "image_suffix": "ukiyo-e Japanese woodblock print style, flat perspective, flowing elegant linework, traditional color palette, wave and nature motifs, Hokusai Hiroshige inspired, woodgrain texture, vertical 9:16 format, no text, high quality",
+    "script_system_prompt": "You are a Zen poet narrating a YouTube Short. Tone: contemplative, minimalist, nature-focused. Use haiku-like phrasing. Every line should feel like a brushstroke — deliberate and beautiful.",
+    "negative": "photorealistic, 3D, modern, blurry, deformed, watermark, neon"
+  },
+
+  "graffiti_street": {
+    "label": "Graffiti / Street Art",
+    "category": "urban",
+    "description": "Urban street art with spray paint texture, bold tags, and raw concrete walls.",
+    "image_suffix": "graffiti street art style, spray paint texture, bold vibrant tags, raw concrete brick wall, urban mural aesthetic, dripping paint effects, stencil art, Banksy inspired, vertical 9:16 format, no text, high detail",
+    "script_system_prompt": "You are a street culture storyteller narrating a YouTube Short. Tone: raw, authentic, rhythmic. Write like spoken word poetry — punchy cadence, real talk, underground energy.",
+    "negative": "clean, corporate, pastel, blurry, deformed, watermark, minimalist"
+  },
+
+  "low_poly": {
+    "label": "Low Poly",
+    "category": "3d",
+    "description": "Geometric low-polygon 3D art with flat-shaded triangular facets and clean gradients.",
+    "image_suffix": "low poly 3D art, geometric triangular facets, flat shading, clean gradient colors, polygon mesh aesthetic, abstract landscape, modern digital art, crystal-like formations, vertical 9:16 format, no text",
+    "script_system_prompt": "You are a futuristic AI narrator for a YouTube Short. Tone: precise, geometric, clean. Speak in structured patterns. Use data-driven language. Make complexity feel simple.",
+    "negative": "realistic, organic, blurry, deformed, watermark, detailed texture"
+  },
+
+  "surrealism": {
+    "label": "Surrealism (Dalí)",
+    "category": "art",
+    "description": "Salvador Dalí inspired dreamscapes — melting objects, impossible geometry, dream logic.",
+    "image_suffix": "surrealist art style, Salvador Dali inspired, melting distorted objects, impossible dreamlike geometry, desert dreamscape, hyper-detailed impossible architecture, subconscious imagery, vertical 9:16 format, no text, museum quality",
+    "script_system_prompt": "You are a surrealist philosopher narrating a YouTube Short. Tone: mind-bending, poetic, paradoxical. Challenge reality. Ask questions that have no answers. Make the viewer question everything.",
+    "negative": "realistic, normal, blurry, low quality, watermark, simple"
+  },
+
+  "isometric": {
+    "label": "Isometric",
+    "category": "3d",
+    "description": "Clean isometric 3D diorama view — perfect for explainer and tech content.",
+    "image_suffix": "isometric 3D view, clean diorama scene, soft studio lighting, miniature tilt-shift effect, pastel color scheme, detailed small-scale environment, game-like world building, vertical 9:16 format, no text, high quality",
+    "script_system_prompt": "You are a friendly explainer narrating a YouTube Short. Tone: clear, enthusiastic, educational. Break complex ideas into bite-sized pieces. Use analogies. Make learning feel effortless.",
+    "negative": "dark, gritty, blurry, deformed, watermark, realistic photo"
+  },
+
+  "glitch_art": {
+    "label": "Glitch Art",
+    "category": "digital",
+    "description": "Corrupted digital aesthetic with pixel sorting, chromatic aberration, and data moshing.",
+    "image_suffix": "glitch art aesthetic, pixel sorting corruption, chromatic aberration, data moshing effect, RGB color split, digital distortion, broken screen artifacts, VHS tracking errors, vertical 9:16 format, no text",
+    "script_system_prompt": "You are a digital consciousness narrating a YouTube Short. Tone: fragmented, glitchy, urgent. Use broken sentences. Repeat key words. Create a sense of signal interference — truth fighting through static.",
+    "negative": "clean, smooth, realistic, blurry, watermark, traditional art"
+  },
+
+  "flat_design": {
+    "label": "Flat Design (UI/Infographic)",
+    "category": "design",
+    "description": "Clean flat vector illustration style — perfect for educational and business content.",
+    "image_suffix": "flat design illustration, clean vector art, bold flat colors, simple geometric shapes, modern infographic style, minimal shadows, professional business aesthetic, vertical 9:16 format, no text, high quality",
+    "script_system_prompt": "You are a startup founder pitching in a YouTube Short. Tone: confident, concise, visionary. Use power words — disrupt, transform, unlock. Make the viewer feel they're hearing the next big thing.",
+    "negative": "realistic, dark, gritty, blurry, deformed, watermark, complex textures"
+  },
+
+  "afrofuturism": {
+    "label": "Afrofuturism",
+    "category": "sci-fi",
+    "description": "African cultural motifs fused with futuristic technology — vibrant, powerful, cosmic.",
+    "image_suffix": "Afrofuturism aesthetic, African cultural patterns and motifs, futuristic technology fusion, vibrant gold and deep purple palette, cosmic celestial backgrounds, powerful regal figures, ornate technological jewelry, vertical 9:16 format, no text, 8k",
+    "script_system_prompt": "You are an Afrofuturist storyteller narrating a YouTube Short. Tone: powerful, cosmic, ancestral. Blend ancient wisdom with future vision. Speak with the gravity of a griot and the wonder of a space explorer.",
+    "negative": "generic, blurry, deformed, watermark, muted, dull, western-centric"
+  },
+
+  "solarpunk": {
+    "label": "Solarpunk",
+    "category": "sci-fi",
+    "description": "Optimistic eco-future with living architecture, solar panels, and lush greenery.",
+    "image_suffix": "solarpunk aesthetic, lush green living architecture, solar panels and wind turbines, eco-utopian cityscape, warm golden sunlight, organic futuristic design, overgrown technology, optimistic bright palette, vertical 9:16 format, no text, 8k",
+    "script_system_prompt": "You are a hopeful future-journalist narrating a YouTube Short. Tone: optimistic, warm, inspiring. Paint a picture of a world that works. Make sustainability sound exciting, not preachy.",
+    "negative": "dark, dystopian, polluted, blurry, deformed, watermark, gritty"
+  }
+}

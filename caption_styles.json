@@ -1,0 +1,42 @@
+{
+  "modern_bold_yellow": {
+    "font_name": "Arial",
+    "font_size": 24,
+    "primary_color": "&H0000FFFF",
+    "outline_color": "&H00000000",
+    "outline_width": 2,
+    "shadow_width": 1,
+    "alignment": 2,
+    "margin_v": 60
+  },
+  "minimal_white": {
+    "font_name": "Arial",
+    "font_size": 20,
+    "primary_color": "&H00FFFFFF",
+    "outline_color": "&H00000000",
+    "outline_width": 1,
+    "shadow_width": 0,
+    "alignment": 2,
+    "margin_v": 40
+  },
+  "zack_films_style": {
+    "font_name": "Impact",
+    "font_size": 28,
+    "primary_color": "&H0000FFFF",
+    "outline_color": "&H00000000",
+    "outline_width": 3,
+    "shadow_width": 2,
+    "alignment": 2,
+    "margin_v": 80
+  },
+  "default": {
+    "font_name": "Arial",
+    "font_size": 24,
+    "primary_color": "&H0000FFFF",
+    "outline_color": "&H00000000",
+    "outline_width": 2,
+    "shadow_width": 1,
+    "alignment": 2,
+    "margin_v": 60
+  }
+}

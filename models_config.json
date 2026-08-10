@@ -1,0 +1,478 @@
+{
+  "_meta": {
+    "description": "AutoTube AI Models Registry — all models the system can hook into, ranked by quality",
+    "version": "1.0.0",
+    "usage": "Each section (image_models, script_models, tts_models) lists models ranked best → worst. Set the active model by its 'id'. The system reads this file at runtime.",
+    "ranking_note": "Rankings are based on output quality, prompt adherence, and reliability. 'tier' values: S (best), A (great), B (good), C (usable). 'cost' values: free, freemium, paid."
+  },
+
+  "video_models": {
+    "_description": "Models for generating cinematic motion video from images",
+    "kling": {
+      "models": [
+        {
+          "id": "kling-v1.6",
+          "label": "Kling 1.6 (Standard)",
+          "cost": "premium",
+          "notes": "Best quality. ~8 credits/s for 1080p, ~6 credits/s for 720p"
+        },
+        {
+          "id": "kling-v1.6-turbo",
+          "label": "Kling 1.6 Turbo",
+          "cost": "low",
+          "notes": "Faster, lower cost. Good for testing and social media."
+        }
+      ]
+    }
+  },
+
+  "image_models": {
+    "_description": "Models for generating scene images. Ranked by visual quality and prompt accuracy.",
+
+    "pollinations": {
+      "_description": "Pollinations.ai models — free, no API key required for basic use",
+      "_endpoint": "https://image.pollinations.ai/prompt/{prompt}?width=1080&height=1920&model={model}&nologo=true",
+      "_alt_endpoint": "https://gen.pollinations.ai/image/{prompt}?model={model}&width=1080&height=1920&nologo=true",
+
+      "models": [
+        {
+          "id": "flux",
+          "label": "FLUX (Black Forest Labs)",
+          "tier": "S",
+          "rank": 1,
+          "cost": "free",
+          "speed": "medium",
+          "description": "Industry-leading open model. Exceptional photorealism, prompt adherence, and text rendering.",
+          "best_for": ["photorealistic", "cinematic", "general purpose", "text in images"],
+          "notes": "Default recommended model. Consistent high quality across all styles."
+        },
+        {
+          "id": "nanobanana-2",
+          "label": "Nanobanana 2 (Google)",
+          "tier": "S",
+          "rank": 2,
+          "cost": "free",
+          "speed": "medium",
+          "description": "Google's multimodal image model. Strong semantic understanding and instruction following.",
+          "best_for": ["complex scenes", "multi-subject", "instruction following"],
+          "notes": "Excellent for scenes that need precise composition and multiple elements."
+        },
+        {
+          "id": "seedream5-pro",
+          "label": "Seedream 5 Pro (ByteDance)",
+          "tier": "S",
+          "rank": 3,
+          "cost": "free",
+          "speed": "medium",
+          "description": "ByteDance's flagship image model. Beautiful aesthetics and strong text rendering.",
+          "best_for": ["aesthetic visuals", "text rendering", "portrait", "artistic"],
+          "notes": "Often produces the most visually striking results for artistic styles."
+        },
+        {
+          "id": "ideogram-v4",
+          "label": "Ideogram V4",
+          "tier": "A",
+          "rank": 4,
+          "cost": "free",
+          "speed": "medium",
+          "description": "Best-in-class for typography and text accuracy in generated images.",
+          "best_for": ["text in images", "logos", "posters", "infographics"],
+          "notes": "Use this when your images need readable, accurate text overlays."
+        },
+        {
+          "id": "gptimage",
+          "label": "GPT Image (OpenAI)",
+          "tier": "A",
+          "rank": 5,
+          "cost": "free",
+          "speed": "slow",
+          "description": "OpenAI's image model via Pollinations. Easy prompt following, natural compositions.",
+          "best_for": ["ease of use", "natural scenes", "conversational prompts"],
+          "notes": "Very forgiving with prompt wording. Good fallback option."
+        },
+        {
+          "id": "seedream5",
+          "label": "Seedream 5 (ByteDance)",
+          "tier": "A",
+          "rank": 6,
+          "cost": "free",
+          "speed": "fast",
+          "description": "Faster variant of Seedream. Slightly lower quality but better throughput.",
+          "best_for": ["fast generation", "batch processing", "good enough quality"],
+          "notes": "Use when speed matters more than maximum quality."
+        },
+        {
+          "id": "nanobanana-2-lite",
+          "label": "Nanobanana 2 Lite (Google)",
+          "tier": "B",
+          "rank": 7,
+          "cost": "free",
+          "speed": "fast",
+          "description": "Lightweight version of Nanobanana. Faster with slightly less detail.",
+          "best_for": ["fast prototyping", "batch generation", "lower compute"],
+          "notes": "Good for testing pipeline before switching to heavier models."
+        },
+        {
+          "id": "kontext",
+          "label": "Kontext",
+          "tier": "B",
+          "rank": 8,
+          "cost": "free",
+          "speed": "medium",
+          "description": "Specialized for style transformations and image editing tasks.",
+          "best_for": ["style transfer", "image editing", "artistic remix"],
+          "notes": "Better for modifying existing images than generating from scratch."
+        },
+        {
+          "id": "wan-image",
+          "label": "Wan Image",
+          "tier": "B",
+          "rank": 9,
+          "cost": "free",
+          "speed": "medium",
+          "description": "Chinese open-weight image model with strong aesthetic quality.",
+          "best_for": ["artistic visuals", "Eastern aesthetic", "creative scenes"],
+          "notes": "Can produce unique results that differ from Western-trained models."
+        },
+        {
+          "id": "klein",
+          "label": "Klein",
+          "tier": "C",
+          "rank": 10,
+          "cost": "free",
+          "speed": "fast",
+          "description": "Lightweight model for quick generation. Lower detail but reliable.",
+          "best_for": ["quick tests", "placeholder images", "low-resource environments"],
+          "notes": "Use as a last-resort fallback. Fast but limited detail."
+        }
+      ]
+    },
+
+    "huggingface": {
+      "_description": "HuggingFace Inference API models — requires HUGGINGFACE_TOKEN env var",
+      "_endpoint": "https://api-inference.huggingface.co/models/{model_id}",
+
+      "models": [
+        {
+          "id": "black-forest-labs/FLUX.1-dev",
+          "label": "FLUX.1 Dev (Black Forest Labs)",
+          "tier": "S",
+          "rank": 1,
+          "cost": "freemium",
+          "speed": "slow",
+          "description": "Full FLUX.1 development model. Best open-weight quality available for self-hosting.",
+          "best_for": ["maximum quality", "fine-tuning base", "photorealism"],
+          "notes": "May require paid inference or dedicated endpoint for reliable access. Non-commercial license."
+        },
+        {
+          "id": "black-forest-labs/FLUX.1-schnell",
+          "label": "FLUX.1 Schnell (Black Forest Labs)",
+          "tier": "A",
+          "rank": 2,
+          "cost": "free",
+          "speed": "fast",
+          "description": "Speed-optimized FLUX variant. 4-step generation for rapid output.",
+          "best_for": ["fast generation", "batch processing", "real-time apps"],
+          "notes": "Apache 2.0 license — fully free for commercial use. Much faster than dev."
+        },
+        {
+          "id": "stabilityai/stable-diffusion-xl-base-1.0",
+          "label": "Stable Diffusion XL (Stability AI)",
+          "tier": "A",
+          "rank": 3,
+          "cost": "free",
+          "speed": "medium",
+          "description": "The most customizable image model. Massive ecosystem of LoRAs and ControlNets.",
+          "best_for": ["custom styles via LoRA", "ControlNet", "community fine-tunes"],
+          "notes": "Best if you want to load custom style LoRAs from CivitAI. Requires more prompt engineering."
+        },
+        {
+          "id": "stabilityai/stable-diffusion-3.5-large",
+          "label": "Stable Diffusion 3.5 Large (Stability AI)",
+          "tier": "A",
+          "rank": 4,
+          "cost": "freemium",
+          "speed": "slow",
+          "description": "Latest Stable Diffusion with improved architecture. Better text and composition.",
+          "best_for": ["improved text rendering", "complex compositions", "high quality"],
+          "notes": "May have rate limits on free tier. Check HuggingFace for current availability."
+        },
+        {
+          "id": "Tongyi-Kongjian/Z-Image",
+          "label": "Z-Image (Tongyi)",
+          "tier": "B",
+          "rank": 5,
+          "cost": "free",
+          "speed": "slow",
+          "description": "Already integrated in AutoTube. Good quality with occasional cold starts.",
+          "best_for": ["current pipeline compatibility", "artistic images"],
+          "notes": "Currently configured as the HuggingFace option in ai_generator.py. Cold start can take 30-60s."
+        }
+      ]
+    },
+
+    "self_hosted": {
+      "_description": "Models you can run locally with ComfyUI, Forge, or Diffusers. Requires GPU (8GB+ VRAM).",
+
+      "models": [
+        {
+          "id": "flux-1-dev-local",
+          "label": "FLUX.1 Dev (Local)",
+          "tier": "S",
+          "rank": 1,
+          "cost": "free",
+          "speed": "depends on GPU",
+          "description": "Run FLUX locally for unlimited, private generation. Best quality.",
+          "best_for": ["unlimited generation", "privacy", "maximum quality"],
+          "requirements": "24GB+ VRAM recommended (or quantized versions for 8-12GB)",
+          "download": "https://huggingface.co/black-forest-labs/FLUX.1-dev"
+        },
+        {
+          "id": "sdxl-local",
+          "label": "Stable Diffusion XL (Local)",
+          "tier": "A",
+          "rank": 2,
+          "cost": "free",
+          "speed": "depends on GPU",
+          "description": "Run SDXL locally with full LoRA and ControlNet support.",
+          "best_for": ["custom LoRAs", "ControlNet workflows", "unlimited generation"],
+          "requirements": "8GB+ VRAM",
+          "download": "https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0"
+        }
+      ]
+    }
+  },
+
+  "script_models": {
+    "_description": "LLM models for AI script writing. Used in the n8n AI Script Writer node. Ranked by creative writing quality.",
+    "_endpoint": "https://api.groq.com/openai/v1/chat/completions",
+    "_auth": "Bearer token — set GROQ_API_KEY in your Groq credential",
+
+    "groq": {
+      "_description": "Groq-hosted models — ultra-fast inference, free tier available",
+
+      "models": [
+        {
+          "id": "llama-3.3-70b-versatile",
+          "label": "Llama 3.3 70B Versatile (Meta)",
+          "tier": "S",
+          "rank": 1,
+          "cost": "free",
+          "speed": "fast",
+          "description": "Best open-weight model for creative writing. Natural dialogue, strong narrative flow, excellent instruction following.",
+          "best_for": ["script writing", "dialogue", "creative content", "general purpose"],
+          "context_window": 128000,
+          "notes": "Upgrade pick from the current llama-3.1-8b. Dramatically better scripts with richer language."
+        },
+        {
+          "id": "qwen-qwq-32b",
+          "label": "Qwen QWQ 32B (Alibaba)",
+          "tier": "S",
+          "rank": 2,
+          "cost": "free",
+          "speed": "fast",
+          "description": "Excellent reasoning model with thinking capabilities. Great for structured script outlines and complex topics.",
+          "best_for": ["complex topics", "structured outlines", "reasoning-heavy scripts"],
+          "context_window": 131072,
+          "notes": "Has 'thinking' mode — useful for planning script structure before writing."
+        },
+        {
+          "id": "deepseek-r1-distill-llama-70b",
+          "label": "DeepSeek R1 Distill 70B",
+          "tier": "A",
+          "rank": 3,
+          "cost": "free",
+          "speed": "fast",
+          "description": "Reasoning-optimized model. Best for factual, technical, or educational scripts that need accuracy.",
+          "best_for": ["educational content", "technical accuracy", "fact-based scripts"],
+          "context_window": 128000,
+          "notes": "Less 'creative flair' than Llama but more factually precise. Good for science/tech topics."
+        },
+        {
+          "id": "llama-3.1-8b-instant",
+          "label": "Llama 3.1 8B Instant (Meta)",
+          "tier": "B",
+          "rank": 4,
+          "cost": "free",
+          "speed": "ultra-fast",
+          "description": "Current default in AutoTube. Fast and reliable but limited creativity compared to larger models.",
+          "best_for": ["speed", "simple topics", "high volume", "testing"],
+          "context_window": 131072,
+          "notes": "Currently configured in autotube-complete.json. Works but upgrading to 70B is recommended."
+        },
+        {
+          "id": "openai/gpt-oss-20b",
+          "label": "GPT-OSS 20B (OpenAI)",
+          "tier": "B",
+          "rank": 5,
+          "cost": "free",
+          "speed": "fast",
+          "description": "OpenAI's open-weight model on Groq. Balanced quality and speed.",
+          "best_for": ["general purpose", "conversational tone", "balanced output"],
+          "context_window": 128000,
+          "notes": "Good middle ground if Llama 70B is rate-limited."
+        },
+        {
+          "id": "groq/compound",
+          "label": "Groq Compound (Groq)",
+          "tier": "A",
+          "rank": 6,
+          "cost": "free",
+          "speed": "medium",
+          "description": "Groq's integrated system with built-in web search and tool use. Can research topics before writing.",
+          "best_for": ["trending topics", "current events", "fact-checked content"],
+          "context_window": 128000,
+          "notes": "Unique ability to search the web for up-to-date info before writing the script."
+        }
+      ]
+    },
+
+    "pollinations_text": {
+      "_description": "Text models available through Pollinations (free, no key needed)",
+      "_endpoint": "https://text.pollinations.ai/",
+
+      "models": [
+        {
+          "id": "openai",
+          "label": "OpenAI GPT (via Pollinations)",
+          "tier": "A",
+          "rank": 1,
+          "cost": "free",
+          "speed": "medium",
+          "description": "Access OpenAI models for free through Pollinations text API.",
+          "best_for": ["free GPT access", "backup script writer"],
+          "notes": "No API key needed. Good fallback if Groq is down."
+        },
+        {
+          "id": "mistral",
+          "label": "Mistral (via Pollinations)",
+          "tier": "B",
+          "rank": 2,
+          "cost": "free",
+          "speed": "fast",
+          "description": "Mistral models accessible through Pollinations.",
+          "best_for": ["fast generation", "European language support"],
+          "notes": "Good for multilingual script generation."
+        },
+        {
+          "id": "deepseek",
+          "label": "DeepSeek (via Pollinations)",
+          "tier": "B",
+          "rank": 3,
+          "cost": "free",
+          "speed": "fast",
+          "description": "DeepSeek models via Pollinations for reasoning-heavy tasks.",
+          "best_for": ["technical content", "reasoning"],
+          "notes": "Free alternative to Groq-hosted DeepSeek."
+        }
+      ]
+    }
+  },
+
+  "tts_models": {
+    "_description": "Text-to-Speech models for voiceover generation. Ranked by voice naturalness.",
+    "_endpoint": "https://api.groq.com/openai/v1/audio/speech",
+    "_auth": "Bearer token — same Groq API key as script models",
+
+    "groq_tts": {
+      "_description": "Groq-hosted TTS models with ultra-fast synthesis",
+
+      "models": [
+        {
+          "id": "canopylabs/orpheus-v1-english",
+          "label": "Orpheus V1 English (Canopy Labs)",
+          "tier": "S",
+          "rank": 1,
+          "cost": "free",
+          "speed": "fast",
+          "description": "Currently configured in AutoTube. Expressive English TTS with vocal direction support.",
+          "best_for": ["English voiceover", "expressive speech", "emotional range"],
+          "voices": ["troy", "autumn", "hannah", "daniel", "austin", "diana"],
+          "voice_guide": {
+            "troy": "Deep male — authoritative, confident. Best for: tech, business, cinematic.",
+            "autumn": "Warm female — friendly, approachable. Best for: lifestyle, educational, wellness.",
+            "hannah": "Young female — energetic, bright. Best for: pop culture, trends, upbeat content.",
+            "daniel": "Neutral male — clear, professional. Best for: explainers, news, general. (Current default)",
+            "austin": "Casual male — relaxed, conversational. Best for: gaming, comedy, casual topics.",
+            "diana": "Mature female — elegant, composed. Best for: luxury, art, sophisticated content."
+          },
+          "output_format": "wav",
+          "notes": "Supports vocal direction tags: [cheerful], [sad], [whisper], <giggle>, <sigh>. Insert these in your script text for emotional control."
+        },
+        {
+          "id": "canopylabs/orpheus-arabic-saudi",
+          "label": "Orpheus Arabic Saudi (Canopy Labs)",
+          "tier": "A",
+          "rank": 2,
+          "cost": "free",
+          "speed": "fast",
+          "description": "Authentic Saudi Arabic dialect synthesis.",
+          "best_for": ["Arabic content", "Middle East audience"],
+          "voices": ["default"],
+          "output_format": "wav",
+          "notes": "Use for Arabic-language YouTube Shorts targeting Gulf region audiences."
+        }
+      ]
+    }
+  },
+
+  "recommended_combos": {
+    "_description": "Pre-tested model combinations ranked by overall output quality. Use these as starting presets.",
+
+    "maximum_quality": {
+      "label": "🏆 Maximum Quality",
+      "description": "Best possible output — slower but stunning results.",
+      "image_model": "flux",
+      "image_provider": "pollinations",
+      "script_model": "llama-3.3-70b-versatile",
+      "script_provider": "groq",
+      "tts_model": "canopylabs/orpheus-v1-english",
+      "tts_voice": "troy",
+      "notes": "Use this for your best content. ~3-5 min per video."
+    },
+    "balanced": {
+      "label": "⚖️ Balanced (Recommended)",
+      "description": "Great quality with reasonable speed. Best daily driver.",
+      "image_model": "seedream5",
+      "image_provider": "pollinations",
+      "script_model": "llama-3.3-70b-versatile",
+      "script_provider": "groq",
+      "tts_model": "canopylabs/orpheus-v1-english",
+      "tts_voice": "daniel",
+      "notes": "Recommended starting point. ~2-4 min per video."
+    },
+    "speed_run": {
+      "label": "⚡ Speed Run",
+      "description": "Fastest possible pipeline — good for bulk generation and testing.",
+      "image_model": "nanobanana-2-lite",
+      "image_provider": "pollinations",
+      "script_model": "llama-3.1-8b-instant",
+      "script_provider": "groq",
+      "tts_model": "canopylabs/orpheus-v1-english",
+      "tts_voice": "daniel",
+      "notes": "Use for batch runs or testing. ~1-2 min per video."
+    },
+    "artistic": {
+      "label": "🎨 Artistic",
+      "description": "Optimized for visual art styles — anime, manga, painting, etc.",
+      "image_model": "seedream5-pro",
+      "image_provider": "pollinations",
+      "script_model": "qwen-qwq-32b",
+      "script_provider": "groq",
+      "tts_model": "canopylabs/orpheus-v1-english",
+      "tts_voice": "autumn",
+      "notes": "Pair with illustration-category styles from style_prompts.json."
+    },
+    "educational": {
+      "label": "📚 Educational",
+      "description": "Optimized for factual, teaching-style content.",
+      "image_model": "nanobanana-2",
+      "image_provider": "pollinations",
+      "script_model": "deepseek-r1-distill-llama-70b",
+      "script_provider": "groq",
+      "tts_model": "canopylabs/orpheus-v1-english",
+      "tts_voice": "diana",
+      "notes": "DeepSeek's reasoning ensures factual accuracy. Nanobanana handles complex diagrams well."
+    }
+  }
+}
