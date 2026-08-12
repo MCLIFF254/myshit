@@ -1,0 +1,25 @@
+```gitignore
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Editors
+.vscode/
+.idea/
+
+# Windows specific
+Thumbs.db
+Desktop.ini
+
+# PowerShell
+*.ps1xml
+*.psc1
+*.psd1
+*.psm1
+```

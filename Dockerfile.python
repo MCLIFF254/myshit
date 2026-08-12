@@ -1,0 +1,50 @@
+FROM python:3.11-slim
+
+WORKDIR /scripts
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    imagemagick \
+    fonts-liberation \
+    fonts-dejavu \
+    libass-dev \
+    curl \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+# Install Python dependencies
+RUN pip install --no-cache-dir \
+    flask==3.0.0 \
+    moviepy==2.0.0 \
+    requests==2.31.0 \
+    httpx==0.25.0 \
+    pillow==10.2.0 \
+    gunicorn==21.2.0
+
+# Copy application files
+COPY video_api.py /scripts/
+COPY create_video.py /scripts/
+COPY ai_generator.py /scripts/
+COPY cinematic_generator.py /scripts/
+COPY storyboard_generator.py /scripts/
+COPY *.json /scripts/
+COPY templates/ /scripts/templates/
+
+# Create necessary directories
+RUN mkdir -p /videos /scripts/templates /assets
+
+# Set environment variables
+ENV FLASK_ENV=production
+ENV DEBUG_MODE=false
+ENV PYTHONUNBUFFERED=1
+
+# Expose API port
+EXPOSE 5001
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:5001/health || exit 1
+
+# Run with gunicorn for production
+CMD ["gunicorn", "--bind", "0.0.0.0:5001", "--workers", "2", "--threads", "4", "video_api:app"]
