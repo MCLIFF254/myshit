@@ -1,0 +1,325 @@
+{
+    "name": "AutoTube - Complete Pipeline with Video",
+    "nodes": [
+        {
+            "parameters": {},
+            "id": "manual-trigger",
+            "name": "Manual Trigger",
+            "type": "n8n-nodes-base.manualTrigger",
+            "typeVersion": 1,
+            "position": [
+                100,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "values": {
+                    "string": [
+                        {
+                            "name": "topic",
+                            "value": "5 AI tools that will change your life in 2025"
+                        },
+                        {
+                            "name": "style",
+                            "value": "default",
+                            "_comment": "Style key from style_prompts.json. Options: anime, cyberpunk, manga, noir, retro_80s, vaporwave, photorealistic, cinematic_blockbuster, dark_fantasy, pop_art, watercolor, pixel_art, studio_ghibli, comic_book, oil_painting, minimalist_3d, neon_glow, steampunk, horror, ukiyo_e, graffiti_street, low_poly, surrealism, isometric, glitch_art, flat_design, afrofuturism, solarpunk, default"
+                        },
+                        {
+                            "name": "imageModel",
+                            "value": "flux",
+                            "_comment": "Image model id from models_config.json. Options (ranked best→worst): flux, nanobanana-2, seedream5-pro, ideogram-v4, gptimage, seedream5, nanobanana-2-lite, kontext, wan-image, klein"
+                        },
+                        {
+                            "name": "videoMode",
+                            "value": "cinematic"
+                        },
+                        {
+                            "name": "videoProvider",
+                            "value": "kling"
+                        },
+                        {
+                            "name": "captionStyle",
+                            "value": "modern_bold_yellow"
+                        },
+                        {
+                            "name": "musicGenre",
+                            "value": ""
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "set-topic",
+            "name": "Set Topic",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                280,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://api.groq.com/openai/v1/chat/completions",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpBearerAuth",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"model\": \"llama-3.1-8b-instant\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"You are a viral YouTube Shorts script writer. You create engaging, punchy 30-second scripts that hook viewers instantly.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Create an engaging 30-second script about: {{ $json.topic }}\\n\\nFormat your response EXACTLY like this:\\n\\nHOOK (0-3 seconds):\\n[Write an attention-grabbing question or shocking fact]\\n\\nCONTENT (3-25 seconds):\\n[Write 3-4 key points]\\n\\nCTA (25-30 seconds):\\n[Write call to action + hashtags]\\n\\nTITLE:\\n[Write a catchy YouTube title under 60 characters]\\n\\nDESCRIPTION:\\n[Write a short description with hashtags]\"\n    }\n  ],\n  \"temperature\": 0.7,\n  \"max_tokens\": 1024\n}",
+                "options": {
+                    "timeout": 30000
+                }
+            },
+            "credentials": {
+                "httpBearerAuth": {
+                    "id": "groq-api",
+                    "name": "Groq API"
+                }
+            },
+            "id": "ai-script-writer",
+            "name": "AI Script Writer",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                460,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "const choices = $input.first().json.choices;\nconst response = choices && choices[0] && choices[0].message ? choices[0].message.content : '';\n\nconst hookMatch = response.match(/HOOK[^:]*:\\s*([\\s\\S]*?)(?=CONTENT|$)/i);\nconst contentMatch = response.match(/CONTENT[^:]*:\\s*([\\s\\S]*?)(?=CTA|$)/i);\nconst ctaMatch = response.match(/CTA[^:]*:\\s*([\\s\\S]*?)(?=TITLE|$)/i);\nconst titleMatch = response.match(/TITLE[^:]*:\\s*([\\s\\S]*?)(?=DESCRIPTION|$)/i);\nconst descMatch = response.match(/DESCRIPTION[^:]*:\\s*([\\s\\S]*?)$/i);\n\nconst cleanText = (text) => text ? text.trim().replace(/\\[.*?\\]/g, '').trim() : '';\n\nconst hook = hookMatch ? cleanText(hookMatch[1]) : 'Did you know this?';\nconst content = contentMatch ? cleanText(contentMatch[1]) : response.substring(0, 200);\nconst cta = ctaMatch ? cleanText(ctaMatch[1]) : 'Follow for more!';\nlet title = titleMatch ? cleanText(titleMatch[1]) : $('Set Topic').first().json.topic.substring(0, 50);\nlet description = descMatch ? cleanText(descMatch[1]) : `${title} #shorts #viral #trending`;\n\nif (!title.includes('#shorts')) {\n  title = title.substring(0, 90) + ' #shorts';\n}\n\nif (!description.includes('#shorts')) {\n  description = description + '\\n\\n#shorts #viral #trending #ai #automation';\n}\n\nconst fullScript = `${hook}\\n\\n${content}\\n\\n${cta}`;\n\nreturn [{\n  json: {\n    topic: $('Set Topic').first().json.topic,\n    hook: hook,\n    content: content,\n    cta: cta,\n    title: title.substring(0, 100),\n    description: description.substring(0, 500),\n    fullScript: fullScript,\n    rawResponse: response,\n    tags: ['shorts', 'viral', 'trending', 'ai', 'automation', '2025']\n  }\n}];"
+            },
+            "id": "parse-script",
+            "name": "Parse Script",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                640,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://api.groq.com/openai/v1/audio/speech",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpBearerAuth",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"model\": \"canopylabs/orpheus-v1-english\",\n  \"input\": {{ JSON.stringify($json.fullScript) }},\n  \"voice\": \"daniel\",\n  \"response_format\": \"wav\"\n}",
+                "options": {
+                    "response": {
+                        "response": {
+                            "responseFormat": "file"
+                        }
+                    },
+                    "timeout": 120000
+                }
+            },
+            "credentials": {
+                "httpBearerAuth": {
+                    "id": "groq-api",
+                    "name": "Groq API"
+                }
+            },
+            "id": "text-to-speech",
+            "name": "Text to Speech",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                820,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "write",
+                "fileName": "=/videos/audio_{{ $now.format('yyyyMMdd_HHmmss') }}.wav",
+                "dataPropertyName": "data"
+            },
+            "id": "save-audio",
+            "name": "Save Audio File",
+            "type": "n8n-nodes-base.readWriteFile",
+            "typeVersion": 1,
+            "position": [
+                1000,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "=\"http://python:5001/{{ $('Set Topic').first().json.videoMode === 'cinematic' ? 'generate-cinematic' : 'generate' }}\"",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"hook\": {{ JSON.stringify($('Parse Script').first().json.hook) }},\n  \"content\": {{ JSON.stringify($('Parse Script').first().json.content) }},\n  \"cta\": {{ JSON.stringify($('Parse Script').first().json.cta) }},\n  \"title\": {{ JSON.stringify($('Parse Script').first().json.title) }},\n  \"audioPath\": {{ JSON.stringify($('Save Audio File').first().json.fileName) }},\n  \"outputPath\": \"/videos/short_{{ $now.format('yyyyMMdd_HHmmss') }}.mp4\",\n  \"useAiImages\": true,\n  \"style\": {{ JSON.stringify($('Set Topic').first().json.style) }},\n  \"imageModel\": {{ JSON.stringify($('Set Topic').first().json.imageModel) }},\n  \"videoMode\": {{ JSON.stringify($('Set Topic').first().json.videoMode) }},\n  \"videoProvider\": {{ JSON.stringify($('Set Topic').first().json.videoProvider) }},\n  \"captionStyle\": {{ JSON.stringify($('Set Topic').first().json.captionStyle) }},\n  \"musicGenre\": {{ JSON.stringify($('Set Topic').first().json.musicGenre) }}\n}",
+                "options": {
+                    "timeout": 600000
+                }
+            },
+            "id": "generate-video",
+            "name": "Generate Video",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                1180,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "values": {
+                    "string": [
+                        {
+                            "name": "status",
+                            "value": "=✅ Video Created Successfully!\\n\\n📝 Topic: {{ $('Set Topic').first().json.topic }}\\n🎬 Title: {{ $('Parse Script').first().json.title }}\\n🎥 Video: {{ $json.videoPath }}\\n📦 Size: {{ Math.round($json.fileSize / 1024 / 1024 * 100) / 100 }} MB\\n🔊 Audio: {{ $('Save Audio File').first().json.fileName }}"
+                        },
+                        {
+                            "name": "videoFile",
+                            "value": "={{ $json.videoPath }}"
+                        },
+                        {
+                            "name": "videoTitle",
+                            "value": "={{ $('Parse Script').first().json.title }}"
+                        },
+                        {
+                            "name": "videoDescription",
+                            "value": "={{ $('Parse Script').first().json.description }}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "prepare-upload",
+            "name": "Final Output",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1360,
+                300
+            ]
+        }
+    ],
+    "connections": {
+        "Manual Trigger": {
+            "main": [
+                [
+                    {
+                        "node": "Set Topic",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Set Topic": {
+            "main": [
+                [
+                    {
+                        "node": "AI Script Writer",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Script Writer": {
+            "main": [
+                [
+                    {
+                        "node": "Parse Script",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Parse Script": {
+            "main": [
+                [
+                    {
+                        "node": "Text to Speech",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Text to Speech": {
+            "main": [
+                [
+                    {
+                        "node": "Save Audio File",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Save Audio File": {
+            "main": [
+                [
+                    {
+                        "node": "Generate Video",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Generate Video": {
+            "main": [
+                [
+                    {
+                        "node": "Final Output",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "tags": [
+        {
+            "name": "AutoTube"
+        },
+        {
+            "name": "AI Slideshow"
+        }
+    ],
+    "triggerCount": 0,
+    "versionId": "7"
+}
